@@ -27,7 +27,7 @@
         name="content"
         value="{{ old('content') }}"
       />
-      <select class="create-form__item-select" name="category_id" required>
+      <select class="create-form__item-select" name="category_id">
         <option value="" selected disabled>カテゴリ</option>
         @foreach ($categories as $category)
           <option value="{{ $category->id }}">{{ $category->name }}</option>
