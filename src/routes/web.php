@@ -9,8 +9,8 @@ Route::post('/categories', [CategoryController::class, 'store'])->name('categori
 Route::patch('/categories/update', [CategoryController::class, 'update']);
 Route::delete('/categories/delete', [CategoryController::class, 'destroy']);
 
-Route::get('/', [TodoController::class, 'index']);
-Route::post('/todos', [TodoController::class, 'store']);
+Route::get('/', [TodoController::class, 'index'])->name('todo.index');
+Route::post('/todos', [TodoController::class, 'store'])->name('todo.store');
 Route::patch('/todos/update', [TodoController::class, 'update']);
 Route::delete('/todos/delete', [TodoController::class, 'destroy']);
-
+Route::get('/todos/search', [TodoController::class, 'search']);

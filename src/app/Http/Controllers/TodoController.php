@@ -9,29 +9,37 @@ use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::all();
-        $todos = Todo::all();
+
+        $query = Todo::with('category');
+
+        if ($request->category_id) {
+        $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->keyword) {
+        $query->where('content', 'LIKE', "%{$request->keyword}%");
+        }
+
+        $todos = $query->get();
+
         return view('index', compact('todos', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(TodoRequest $request)
     {
-        $request->validate(
-            ['category_id' => 'required', 'content' => 'required',],
-            ['category_id.required' => 'カテゴリを選択してください',
-            'content.required'     => 'Todoの内容を入力してください',]
-        );
 
-        Todo::create($request->all());
+        $todo = $request->only(['category_id', 'content']);
+        Todo::create($todo);
 
         return redirect('/')->with('message', 'Todoを作成しました');
     }
 
     public function update(TodoRequest $request)
     {
-        $todo = $request->all();
+        $todo = $request->only(['content']);
         Todo::find($request->id)->update($todo);
 
         return redirect('/')->with('message', 'Todoを更新しました');
@@ -42,5 +50,13 @@ class TodoController extends Controller
         Todo::findOrFail($request->id)->delete();
 
         return redirect('/')->with('message', 'Todoを削除しました');
+    }
+
+    public function search(Request $request)
+    {
+        $todos = Todo::with('category')->categorySearch($request->category_id)->keywordSearch($request->keyword)->get();
+        $categories = Category::all();
+
+        return view('index', compact('todos', 'categories'));
     }
 }

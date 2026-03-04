@@ -8,7 +8,7 @@
   <div class="todo__alert--danger">
     <ul>
       @foreach ($errors->all() as $error)
-      <li>{{ $error }}</li>
+      <p>{{ $error }}</p>
       @endforeach
     </ul>
   </div>
@@ -19,12 +19,10 @@
     <h2>新規作成</h2>
   </div>
   <div class="category__content">
-    <form class="create-form" action="{{ route('categories.store') }}" method="POST">
+    <form class="create-form" action="{{ route('todo.store') }}" method="POST">
     @csrf
     <div class="create-form__item">
-      <input class="create-form__item-input" type="text" name="name" value="{{ old('content') }}"/>
-    </div>
-    <div class="create-form__item">
+      <input class="create-form__item-input" type="text" name="content" value="{{ old('content') }}"/>
       <select class="create-form__item-select" name="category_id">
         <option value="" selected disabled>カテゴリ</option>
         @foreach ($categories as $category)
@@ -39,11 +37,17 @@
   <div class="section__title">
     <h2>Todo検索</h2>
   </div>
-  <form class="search-form">
+  <form class="search-form" action="{{ route('todo.index') }}" method="get">
+    @csrf
     <div class="search-form__item">
-      <input class="search-form__item-input" type="text" />
-      <select class="search-form__item-select">
+      <input class="search-form__item-input" type="text"  name="keyword" value="{{ request('keyword') }}"/>
+      <select class="search-form__item-select" name="category_id">
         <option value="">カテゴリ</option>
+        @foreach ($categories as $category)
+        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+          {{ $category->name }}
+        </option>
+      @endforeach
       </select>
     </div>
     <div class="search-form__button">
@@ -55,7 +59,7 @@
       <tr class="todo-table__row">
         <th class="todo-table__header">
           <span class="todo-table__header-span">Todo</span>
-          <span class="todo-table__header-span">カテゴリ</span> 
+          <span class="todo-table__header-span">カテゴリ</span>
         </th>
       </tr>
       @foreach ($todos as $todo)
@@ -73,7 +77,7 @@
               <input type="hidden" name="id" value="{{ $todo['id'] }}" />
             </div>
             <div class="update-form__item">
-              <p class="update-form__item-p">Category 1</p>
+              <p class="update-form__item-p">{{ $todo['category']['name'] }}</p>
             </div>
             <div class="update-form__button">
               <button class="update-form__button-submit" type="submit">

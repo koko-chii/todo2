@@ -27,8 +27,8 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request)
     {
 
-        $form = $request->all();
-        Category::find($request->id)->update($form);
+        $category = $request->only(['name']);
+        Category::find($request->id)->update($category);
 
         return redirect('/categories')->with('message', 'カテゴリを更新しました');
     }
@@ -39,5 +39,13 @@ class CategoryController extends Controller
         Category::find($request->id)->delete();
 
         return redirect('/categories')->with('message', 'カテゴリを削除しました');
+    }
+
+    public function search(Request $request)
+    {
+        $todos = Todo::with('category')->CategorySearch($request->category_id)->KeywordSearch($request->keyword)->get();
+        $categories = Category::all();
+
+        return view('index', compact('todos', 'categories'));
     }
 }
