@@ -18,15 +18,13 @@
   <div class="section__title">
     <h2>新規作成</h2>
   </div>
-  <form class="create-form" action="/todos" method="post">
+  <div class="category__content">
+    <form class="create-form" action="{{ route('categories.store') }}" method="POST">
     @csrf
     <div class="create-form__item">
-      <input
-        class="create-form__item-input"
-        type="text"
-        name="content"
-        value="{{ old('content') }}"
-      />
+      <input class="create-form__item-input" type="text" name="name" value="{{ old('content') }}"/>
+    </div>
+    <div class="create-form__item">
       <select class="create-form__item-select" name="category_id">
         <option value="" selected disabled>カテゴリ</option>
         @foreach ($categories as $category)
