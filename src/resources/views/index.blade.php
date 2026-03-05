@@ -22,7 +22,8 @@
     <form class="create-form" action="{{ route('todo.store') }}" method="POST">
     @csrf
     <div class="create-form__item">
-      <input class="create-form__item-input" type="text" name="content" value="{{ old('content') }}"/>
+      <input class="create-form__item-input" type="text" name="content"
+      value="{{ old('content') }}"/>
       <select class="create-form__item-select" name="category_id">
         <option value="" selected disabled>カテゴリ</option>
         @foreach ($categories as $category)
@@ -40,11 +41,13 @@
   <form class="search-form" action="{{ route('todo.index') }}" method="get">
     @csrf
     <div class="search-form__item">
-      <input class="search-form__item-input" type="text"  name="keyword" value="{{ request('keyword') }}"/>
+      <input class="search-form__item-input" type="text"  name="keyword" 
+      value="{{ request('keyword') }}"/>
       <select class="search-form__item-select" name="category_id">
         <option value="">カテゴリ</option>
         @foreach ($categories as $category)
-        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ?
+          'selected' : '' }}>
           {{ $category->name }}
         </option>
       @endforeach
@@ -68,13 +71,10 @@
           <form class="update-form" action="/todos/update" method="post">
             @method('PATCH') @csrf
             <div class="update-form__item">
-              <input
-                class="update-form__item-input"
-                type="text"
-                name="content"
-                value="{{ $todo['content'] }}"
-              />
+              <input class="update-form__item-input" type="text" name="content"
+                value="{{ $todo['content'] }}"/>
               <input type="hidden" name="id" value="{{ $todo['id'] }}" />
+              <input type="hidden" name="category_id" value="{{ $todo['category_id'] }}" />
             </div>
             <div class="update-form__item">
               <p class="update-form__item-p">{{ $todo['category']['name'] }}</p>
